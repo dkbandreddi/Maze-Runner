@@ -25,6 +25,7 @@ export class Resources {
 
     get(string) {
         return this.dict[string].clone();
+      
     }
 
     // Loads all specified resources via their URLs

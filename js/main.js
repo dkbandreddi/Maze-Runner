@@ -7,6 +7,17 @@ import { Player } from './Game/Behaviour/Player.js';
 import { Controller} from './Game/Behaviour/Controller.js';
 import { TileNode } from './Game/World/TileNode.js';
 import { Resources } from './Util/Resources.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+async function getData(url) {
+	const response = await fetch(url);
+	
+	return response.json();
+  }
+  
+const data = await getData("js/assets.json");
+
+console.log(data)
 
 // Create Scene
 const scene = new THREE.Scene();
@@ -26,9 +37,15 @@ let gameMap;
 
 // Player
 let player;
+let npc1;
+let npc2;
+let npc3;
 
+var resource = new Resources(data);
 
+await resource.loadAll();
 
+//console.log("here", resource.get("pacman"));
 
 // Setup our scene
 function setup() {
@@ -52,10 +69,24 @@ function setup() {
 	
 	// Create Player
 	player = new Player(new THREE.Color(0xff0000));
+	player.setModel(resource.get("sportscar"));
 
-	
+	npc1 = new NPC(new THREE.Color(0xff0000));
+	npc1.setModel(resource.get("enemy"));
+	npc1.location = gameMap.localize(gameMap.graph.getRandomEmptyTile());
+
+	npc2 = new NPC(new THREE.Color(0xff0000));
+	npc2.setModel(resource.get("powerup"));
+	npc2.location = gameMap.localize(gameMap.graph.getRandomEmptyTile());
+
+	npc3 = new NPC(new THREE.Color(0xff0000));
+	npc3.setModel(resource.get("bigenemy"));
+	npc3.location = gameMap.localize(gameMap.graph.getRandomEmptyTile());
 	// Add the character to the scene
 	scene.add(player.gameObject);
+	scene.add(npc1.gameObject);
+	scene.add(npc2.gameObject);
+	scene.add(npc3.gameObject);
 
 	// Get a random starting place for the enemy
 	let startPlayer = gameMap.graph.getRandomEmptyTile();
@@ -69,6 +100,7 @@ function setup() {
 
 	//First call to animate
 	animate();
+	
 }
 
 
@@ -81,7 +113,10 @@ function animate() {
 
 
 	player.update(deltaTime, gameMap, controller);
- 
+	npc1.update(deltaTime, gameMap);
+	npc2.update(deltaTime, gameMap);
+	npc3.update(deltaTime, gameMap);
+
 	orbitControls.update();
 }
 

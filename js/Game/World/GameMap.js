@@ -14,12 +14,12 @@ export class GameMap {
 		this.start = new THREE.Vector3(-50,0,-35);
 
 		this.width = 100;
-		this.depth = 70;
+		this.depth = 100;
 	
 
 		// We also need to define a tile size 
 		// for our tile based map
-		this.tileSize = 2;
+		this.tileSize = 5;
 
 		// Get our columns and rows based on
 		// width, depth and tile size

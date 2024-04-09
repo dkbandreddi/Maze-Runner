@@ -129,6 +129,31 @@ export class Character {
 
  	}
 
+	// Wander steering behaviour
+	wander() {
+		let d = 10;
+		let r = 10;
+		let a = 0.3;
+
+		let futureLocation = this.velocity.clone();
+		futureLocation.setLength(d);
+		futureLocation.add(this.location);
+
+
+
+		if (this.wanderAngle == null) {
+			this.wanderAngle = Math.random() * (Math.PI*2);
+		} else {
+			let change = Math.random() * (a*2) - a;
+			this.wanderAngle = this.wanderAngle + change;
+		}
+
+		let target = new THREE.Vector3(r*Math.sin(this.wanderAngle), 0, r*Math.cos(this.wanderAngle));
+		target.add(futureLocation);
+		return this.seek(target);
+
+	}
+
 	// Apply force to our character
 	applyForce(force) {
 		// here, we are saying force = force/mass

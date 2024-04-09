@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { VectorUtil } from '../../Util/VectorUtil.js';
 import { Character } from './Character.js';
-
+import { State } from './State';
 export class NPC extends Character {
 
 	// Character Constructor
@@ -12,7 +12,25 @@ export class NPC extends Character {
 		// NEW
 		this.segment = 0;
 		this.path = [];
+
+		// State
+		this.state = new WanderState();
+
+		this.state.enterState(this);
 	}
+
+	//function to switch state
+	switchState(state, deltaTime) {
+		this.state = state;
+		this.state.enterState(this, deltaTime);
+
+	}
+
+	update(deltaTime, gameMap) {
+		this.state.updateState(this, deltaTime);
+		super.update(deltaTime, gameMap);
+	}
+	
 
 
 	// Seek steering behaviour
@@ -87,4 +105,38 @@ export class NPC extends Character {
 
 
 
+
+
+}
+
+export class WanderState extends State {
+	enterState(npc, deltaTime) {
+		
+	}
+
+	updateState(npc, deltaTime, gameMap) {
+		npc.applyForce(npc.wander());
+
+		
+	}
+}
+
+export class PursueState extends State {
+	enterState() {
+
+	}
+
+	updateState() {
+		
+	}
+}
+
+export class EvadeState extends State {
+	enterState() {
+
+	}
+
+	updateState() {
+		
+	}
 }

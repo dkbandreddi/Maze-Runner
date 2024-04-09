@@ -25,7 +25,7 @@ export class Player extends Character {
 
 
 }
-
+ 
 export class IdleState extends State {
 
 	enterState(player) {
