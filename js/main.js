@@ -71,15 +71,15 @@ function setup() {
 	player = new Player(new THREE.Color(0xff0000));
 	player.setModel(resource.get("sportscar"));
 
-	npc1 = new NPC(new THREE.Color(0xff0000));
+	npc1 = new NPC(new THREE.Color(0xff0000),gameMap, player);
 	npc1.setModel(resource.get("enemy"));
 	npc1.location = gameMap.localize(gameMap.graph.getRandomEmptyTile());
 
-	npc2 = new NPC(new THREE.Color(0xff0000));
+	npc2 = new NPC(new THREE.Color(0xff0000),gameMap, player);
 	npc2.setModel(resource.get("powerup"));
 	npc2.location = gameMap.localize(gameMap.graph.getRandomEmptyTile());
 
-	npc3 = new NPC(new THREE.Color(0xff0000));
+	npc3 = new NPC(new THREE.Color(0xff0000),gameMap, player);
 	npc3.setModel(resource.get("bigenemy"));
 	npc3.location = gameMap.localize(gameMap.graph.getRandomEmptyTile());
 	// Add the character to the scene
@@ -113,9 +113,9 @@ function animate() {
 
 
 	player.update(deltaTime, gameMap, controller);
-	npc1.update(deltaTime, gameMap);
-	npc2.update(deltaTime, gameMap);
-	npc3.update(deltaTime, gameMap);
+	npc1.update(deltaTime, gameMap,player);
+	// npc2.update(deltaTime, gameMap,player);
+	// npc3.update(deltaTime, gameMap,player);
 
 	orbitControls.update();
 }
