@@ -37,16 +37,17 @@ Lives System is reflected in the UI, and the game responds accordingly when live
 Work Contribution.
 
 Dinesh
--Worked on movement of NPC's. Implemented the state machine for NPC where the npc follows the path given provided by the A* algorithm and chases the player 
+
+- Worked on movement of NPC's. Implemented the state machine for NPC where the npc follows the path given provided by the A* algorithm and chases the player 
 when its in the vicinity of the npc.
 
--Implemented the timer and life concept.
+- Implemented the timer and life concept.
 
--Added functionality to look at the path provided by the A* which is followed by the NPC.
+- Added functionality to look at the path provided by the A* which is followed by the NPC.
 
 Mehul
 -  ⁠managing, sourcing assets for various entities
--  
+  
 -  ⁠creation of game loop to add game play objects for progression.
 
 
