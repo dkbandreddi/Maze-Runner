@@ -6,7 +6,7 @@ import { NPC } from './Game/Behaviour/NPC.js';
 import { Player } from './Game/Behaviour/Player.js';
 import { Controller} from './Game/Behaviour/Controller.js';
 import { Resources } from './Util/Resources.js';
-import { Spawn } from './Game/Behaviour/spawn.js';
+import { Spawn } from './Game/Behaviour/Spawn.js';
 
 // a master array to store references to all entities on map
 var entities = []
@@ -28,7 +28,7 @@ async function getData(url) {
   
 const data = await getData("js/assets.json");
 
-
+var totaltime = 0
 
 // Create Scene
 const scene = new THREE.Scene();
@@ -103,11 +103,13 @@ function setup() {
 	
 	
 	// Create Player
-	console.log(id);
+	
 	player = new Player(new THREE.Color(0xff0000), id);
 	id += 1;
 	player.size = 3.5;
 	player.setModel(resource.get("pacman2"));
+	console.log(player.gameObject);
+	player.gameObject.scale.set(1,1,1);
 	entities.push(player)
 	entitiesMap["player"].push(player);
 
@@ -164,10 +166,17 @@ function setup() {
 
 function checkSpawns(deltaTime) {
 	var secs = clock.getElapsedTime();
-	var flag = Math.trunc(secs) % 7 == 0;
+	totaltime = totaltime + deltaTime;
+	if (totaltime > 3) {
+		var flag = true
+		totaltime = 0;
+	}
+	//var flag = Math.trunc(secs) % 5 == 0;
 
 	
-	if (flag && entitiesMap["coins"].length <= 3) {
+	
+	
+	if (flag && entitiesMap["coins"].length <= 3 ) {
 		
 		
 		let coin = new Spawn(new THREE.Color(0x00ff00), "coin", id);
@@ -180,16 +189,16 @@ function checkSpawns(deltaTime) {
 		
 		entities.push(coin);
 		entitiesMap["coins"].push(coin);
-		console.log("here", entitiesMap["coins"].length)
-		//console.log("coin".concat(entitiesMap["coins"].length.toString()));
+		
+		
 		coin.gameObject.name = "coin".concat(entitiesMap["coins"].length.toString());
 		scene.add(coin.gameObject);
+		flag = false;
 	}
 
 	
 	if (entitiesMap["powerups"].length == 0 && Math.trunc(secs) % 25 == 0){
-		//spawn a powerup
-		//console.log("making powerup");
+		//spawn power up
 		let m = resource.get("powerup");
 		let power = new Spawn(new THREE.Color(0x00ff00), "powerup", id);
 		id += 1;
