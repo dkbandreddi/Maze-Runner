@@ -125,17 +125,17 @@ export class GameMap {
             tentativeGScore + this.manhattanDistance(neighbor, endNode)
           );
         } else if (tentativeGScore >= gScores.get(neighbor)) {
-          continue; 
+          continue; // This is not a better path.
         }
 
-       
+        // This path is the best until now. Record it!
         parents.set(neighbor, currentNode);
         gScores.set(neighbor, tentativeGScore);
         neighbor.f =
-          tentativeGScore + this.manhattanDistance(neighbor, endNode); 
+          tentativeGScore + this.manhattanDistance(neighbor, endNode); // Update f value
       }
     }
-    return []; 
+    return []; // Failed to find a path
   }
 
   backtrack(parents, startNode, endNode) {
@@ -147,11 +147,7 @@ export class GameMap {
       currentNode = parents.get(currentNode);
     }
 
-    path.unshift(startNode); 
+    path.unshift(startNode); // Add the start node at the beginning
     return path;
   }
-
-  setTileType(node) {
-		this.mapRenderer.createTile(node);	
-	}
 }
