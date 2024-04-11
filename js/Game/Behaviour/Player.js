@@ -3,9 +3,10 @@ import { State } from './State';
 
 export class Player extends Character {
 
-	constructor(colour) {
-		super(colour);
+	constructor(colour, id) {
+		super(colour, id);
 		this.lives = 3;
+		this.score = 0;
 		this.frictionMagnitude = 20;
 
 		// State
@@ -21,6 +22,11 @@ export class Player extends Character {
 			return true; // Player lost all lives
 		}
 		return false; // Player still has lives left
+	}
+	addScore() {
+		this.score += 1;
+		document.getElementById('score').innerText = `Score: ${this.score}`;
+		
 	}
 	isAlive() {
         return this.lives > 0;

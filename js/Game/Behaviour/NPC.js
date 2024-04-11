@@ -4,8 +4,8 @@ import { Character } from "./Character.js";
 import { State } from "./State";
 export class NPC extends Character {
   // Character Constructor
-  constructor(mColor, gameMap, player) {
-    super(mColor);
+  constructor(mColor, gameMap, player, id) {
+    super(mColor, id);
     this.gameMap = gameMap;
     this.player = player;
     this.currentPath = { points: [] };

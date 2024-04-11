@@ -1,8 +1,8 @@
 import { Character } from "./Character.js";
 
 export class Spawn extends Character {
-    constructor(mColor, type) {
-        super(mColor);
+    constructor(mColor, type, id) {
+        super(mColor, id);
         
         
         // add more initialization

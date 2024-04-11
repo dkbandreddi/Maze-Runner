@@ -21,6 +21,7 @@ var entitiesMap = {
 	"enemies" : []
 }
 
+var id = 0;
 
 async function getData(url) {
 	const response = await fetch(url);
@@ -70,10 +71,12 @@ await resource.loadAll();
 
 // Setup our scene
 function setup() {
+	id = 0;
 	gameOver = false;
 
 	document.getElementById('timer').innerText = `Timer: ${timeLeft}`;
     document.getElementById('lives').innerText = `Lives: 3`; 
+	document.getElementById('score').innerText = `Score: 0`; 
     setInterval(() => {
         if (!gameOver && timeLeft > 0) {
             timeLeft--;
@@ -103,18 +106,25 @@ function setup() {
 	
 	
 	// Create Player
-	player = new Player(new THREE.Color(0xff0000));
+	console.log(id);
+	player = new Player(new THREE.Color(0xff0000), id);
+	id += 1;
+	player.size = 3.5;
 	player.setModel(resource.get("pacman2"));
-	console.log(player);
+	//console.log(player);
 	entities.push(player)
+	entitiesMap["player"].push(player);
 
-	npc1 = new NPC(new THREE.Color(0xff0000),gameMap, player);
+
+	npc1 = new NPC(new THREE.Color(0xff0000),gameMap, player, id);
+	id += 1;
 	npc1.setModel(resource.get("ghost pacman"));
 	npc1.location = gameMap.localize(gameMap.graph.getRandomEmptyTile());
 	entities.push(npc1)
 	entitiesMap["enemies"].push(npc1);
 	
-	npc2 = new NPC(new THREE.Color(0xff0000),gameMap, player);
+	npc2 = new NPC(new THREE.Color(0xff0000),gameMap, player, id);
+	id += 1;
 	npc2.setModel(resource.get("ghost yellow"));
 	npc2.location = gameMap.localize(gameMap.graph.getRandomEmptyTile());
 	entities.push(npc2)
@@ -141,6 +151,7 @@ function setup() {
 
 	// Add all entities to the scene
 	for(let i=0; i < entities.length; i++) {
+		
 		scene.add(entities[i].gameObject);
 	}
 
@@ -162,9 +173,10 @@ function checkSpawns(deltaTime) {
 	
 	if (flag && entitiesMap["coins"].length <= 3) {
 		
-		console.log("making a coin")
-		let coin = new Spawn(new THREE.Color(0x00ff00), "coin");
-		coin.size = 0.5;
+		
+		let coin = new Spawn(new THREE.Color(0x00ff00), "coin", id);
+		id += 1;
+		coin.size = 0.75;
 		coin.setModel(resource.get("coin2"));
 
 		coin.location = gameMap.localize(gameMap.graph.getRandomEmptyTile());
@@ -172,7 +184,9 @@ function checkSpawns(deltaTime) {
 		
 		entities.push(coin);
 		entitiesMap["coins"].push(coin);
-	
+		console.log("here", entitiesMap["coins"].length)
+		//console.log("coin".concat(entitiesMap["coins"].length.toString()));
+		coin.gameObject.name = "coin".concat(entitiesMap["coins"].length.toString());
 		scene.add(coin.gameObject);
 	}
 
@@ -181,9 +195,12 @@ function checkSpawns(deltaTime) {
 		//spawn a powerup
 		//console.log("making powerup");
 		let m = resource.get("powerup");
-		let power = new Spawn(new THREE.Color(0x00ff00), "powerup", m);
-		console.log(power);
+		let power = new Spawn(new THREE.Color(0x00ff00), "powerup", id);
+		id += 1;
+		power.setModel(resource.get("powerup"));
+		
 		power.location = gameMap.localize(gameMap.graph.getRandomEmptyTile());
+		
 		entities.push(power);
 		entitiesMap["powerups"].push(power);
 
@@ -202,9 +219,40 @@ function checkHealth(deltaTime) {
 
 function checkCollisions() {
 
-	for ( let i = 0; i < entitiesMap["coins"].length; i++) {
+	for ( let i = entitiesMap["coins"].length - 1; i >= 0; i--) {
 		let coin = entitiesMap["coins"][i];
+		const distanceToPlayer = coin.location.distanceTo(player.location);
+		if (distanceToPlayer < 2) {
+			
+			
+			//delete coin from map
+			let deletedId = entitiesMap["coins"][i].id;
+			let deletedObject = entitiesMap["coins"].splice(i, i);
+			//delte from 
+			for ( let j = 0; j < entities.length; j++) {
+				if (entities[j].id == deletedId) {
+			
+					entities.splice(j, j);
+				}
+			}
+			//add score
+			player.addScore();
 
+			//update scene
+			let index = i + 1;
+			console.log("deleting", "coin".concat(index.toString()))
+			let toD = scene.getObjectByName("coin".concat(index.toString()));
+			
+
+			console.log("to be delete", deletedId);
+			console.log(entities);
+			console.log(entitiesMap);
+			console.log(toD);
+    		scene.remove(toD);
+			const coinNode = gameMap.quantize(player.location);
+      		gameMap.setTileType(coinNode);
+			//animate();
+		}
 	}
 }
 
@@ -216,9 +264,9 @@ function gamePlayLoop(deltaTime) {
 	//checkHealth()
 
 	//check collisions. esp between coins/health with player.
-	//checkCollisions()
+	checkCollisions()
 
-}
+} 
 
 // animate
 function animate() {
@@ -265,6 +313,8 @@ function animate() {
 	if (Math.trunc(timeElapsed) % 5 == 0) {
 		//console.log(entitiesMap);
 	}
+
+	
 }
 
 

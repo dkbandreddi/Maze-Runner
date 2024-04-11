@@ -4,8 +4,8 @@ import { VectorUtil } from '../../Util/VectorUtil.js';
 export class Character {
 
 	// Character Constructor
-	constructor(mColor) {
-
+	constructor(mColor, id) {
+		this.id = id;
 		this.size = 3;
 
 		// Create our cone geometry and material
@@ -81,7 +81,7 @@ export class Character {
 	checkEdges(gameMap) {
 
 		let node = gameMap.quantize(this.location);
-	
+
 		let nodeLocation = gameMap.localize(node);
 
   		if (!node.hasEdgeTo(node.x-1, node.z)) {

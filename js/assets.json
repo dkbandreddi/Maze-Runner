@@ -59,6 +59,11 @@
         "name" : "coin3",
         "url" : "./models/coin3.glb"
     }
+    ,
+    {
+        "name": "pacman animated",
+        "url": "./models/pacman_animated.glb"
+    }
 
    
 ]
