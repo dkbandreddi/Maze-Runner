@@ -74,14 +74,5 @@ export class MazeGenerator {
 			n.edges = this.map.get(n);
 		}
 	}
-
-
-
-
-
-
-
-
-	
 }
 	

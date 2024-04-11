@@ -11,8 +11,8 @@ export class GameMap {
   constructor() {
     this.start = new THREE.Vector3(-50, 0, -35);
 
-    this.width = 100;
-    this.depth = 100;
+    this.width = 60;
+    this.depth = 60;
 
     // We also need to define a tile size
     // for our tile based map
@@ -125,17 +125,17 @@ export class GameMap {
             tentativeGScore + this.manhattanDistance(neighbor, endNode)
           );
         } else if (tentativeGScore >= gScores.get(neighbor)) {
-          continue; // This is not a better path.
+          continue; 
         }
 
-        // This path is the best until now. Record it!
+       
         parents.set(neighbor, currentNode);
         gScores.set(neighbor, tentativeGScore);
         neighbor.f =
-          tentativeGScore + this.manhattanDistance(neighbor, endNode); // Update f value
+          tentativeGScore + this.manhattanDistance(neighbor, endNode); 
       }
     }
-    return []; // Failed to find a path
+    return []; 
   }
 
   backtrack(parents, startNode, endNode) {
@@ -147,7 +147,11 @@ export class GameMap {
       currentNode = parents.get(currentNode);
     }
 
-    path.unshift(startNode); // Add the start node at the beginning
+    path.unshift(startNode); 
     return path;
   }
+
+  setTileType(node) {
+		this.mapRenderer.createTile(node);	
+	}
 }

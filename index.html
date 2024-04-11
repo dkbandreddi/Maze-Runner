@@ -1,13 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<title>COMP 4303</title>
-		<style>
-			body { margin: 0; }
-		</style>
-	</head>
-	<body>
-		<script type="module" src="/js/main.js"></script>
-	</body>
+  <head>
+    <meta charset="utf-8" />
+    <title>COMP 4303</title>
+    <style>
+      body,
+      html {
+        height: 100%;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #3f3c3c;
+      }
+
+      #gameContainer {
+        width: 80%;
+        height: 80%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+      }
+
+      #gameInfo {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        background-color: rgba(255, 255, 255, 0.8);
+        color: #333;
+        padding: 10px 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        font-family: "Arial", sans-serif;
+        z-index: 10;
+      }
+
+      #timer,
+      #lives {
+        font-size: 1.2em;
+        font-weight: bold;
+        margin: 5px 0;
+        color: #34568b; 
+      }
+      @media (max-width: 768px) {
+        #gameInfo {
+          font-size: smaller;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="gameContainer">
+      <div id="gameInfo">
+        <p id="timer">Timer: 60</p>
+        <p id="lives">Lives: 3</p>
+      </div>
+    </div>
+    <script type="module" src="/js/main.js"></script>
+  </body>
 </html>
