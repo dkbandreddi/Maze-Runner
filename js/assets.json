@@ -22,6 +22,10 @@
     {
         "name" : "powerup",
         "url" : "./models/powerup.glb"
+    },
+    {
+        "name" : "coin",
+        "url" : "./models/coin.gltf"
     }
 
    
