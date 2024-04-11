@@ -35,6 +35,7 @@ Score Tracking is updated in real-time on the game screen.
 Lives System is reflected in the UI, and the game responds accordingly when lives are lost.
 
 Work Contribution.
+
 Dinesh
 -Worked on movement of NPC's. Implemented the state machine for NPC where the npc follows the path given provided by the A* algorithm and chases the player 
 when its in the vicinity of the npc.
