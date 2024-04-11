@@ -8,20 +8,20 @@ import { Controller} from './Game/Behaviour/Controller.js';
 import { TileNode } from './Game/World/TileNode.js';
 import { Resources } from './Util/Resources.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { spawn } from './Game/Behaviour/spawn.js';
+import { Spawn } from './Game/Behaviour/Spawn.js';
 
 // a master array to store references to all entities on map
-entities = []
+var entities = []
 // A map to store reference to entities by their type
-entitiesMap = {
+var entitiesMap = {
 	"coins" : [],
 	"powerups" : [],
 	"player" : [],
 	"enemies" : []
 }
 
-spawns = []
-enemies = []
+var spawns = []
+var enemies = []
 
 async function getData(url) {
 	const response = await fetch(url);
@@ -31,7 +31,7 @@ async function getData(url) {
   
 const data = await getData("js/assets.json");
 
-console.log(data)
+
 
 // Create Scene
 const scene = new THREE.Scene();
@@ -107,26 +107,27 @@ function setup() {
 	// Create Player
 	player = new Player(new THREE.Color(0xff0000));
 	player.setModel(resource.get("sportscar"));
+	console.log(player);
 	entities.push(player)
 
 	npc1 = new NPC(new THREE.Color(0xff0000),gameMap, player);
 	npc1.setModel(resource.get("enemy"));
 	npc1.location = gameMap.localize(gameMap.graph.getRandomEmptyTile());
 	entities.push(npc1)
-	enemies.push(npc1)
+	entitiesMap["enemies"].push(npc1);
 	
 	npc2 = new NPC(new THREE.Color(0xff0000),gameMap, player);
 	npc2.setModel(resource.get("powerup"));
 	npc2.location = gameMap.localize(gameMap.graph.getRandomEmptyTile());
 	entities.push(npc2)
-	enemies.push(npc2)
+	entitiesMap["enemies"].push(npc2);
 	
 	npc3 = new NPC(new THREE.Color(0xff0000),gameMap, player);
 	npc3.setModel(resource.get("bigenemy"));
 	npc3.location = gameMap.localize(gameMap.graph.getRandomEmptyTile());
 
 	entities.push(npc3)
-	enemies.push(npc3)
+	entitiesMap["enemies"].push(npc3);
 
 	// Add all entities to the scene
 	for(let i=0; i < entities.length; i++) {
@@ -145,22 +146,50 @@ function setup() {
 }
 
 function checkSpawns(deltaTime) {
-	secs = deltaTime.getElapsedTime();
-	flag = secs % 7 == 0;
+	var secs = clock.getElapsedTime();
+	var flag = Math.trunc(secs) % 7 == 0;
 
 	if (flag && entitiesMap["coins"].length <= 2) {
-		m = resource.get("coin");
-		let coin = new spawn(new THREE.Color("0x00FF00"), m, "coin");
+		//console.log("making coin");
+		let m = resource.get("sportscar");
+		let coin = new Spawn(new THREE.Color(0x00ff00), "coin");
+		coin.location = gameMap.localize(gameMap.graph.getRandomEmptyTile());
+		console.log(coin);
 		entities.push(coin);
-		entitiesMap["coin"].push(coin);
+		entitiesMap["coins"].push(coin);
+	}
+
+	if (entitiesMap["powerups"].length == 0 && Math.trunc(secs) % 25 == 0){
+		//spawn a powerup
+		//console.log("making powerup");
+		let m = resource.get("powerup");
+		let power = new Spawn(new THREE.Color(0x00ff00), "powerup", m);
+		console.log(power);
+		power.location = gameMap.localize(gameMap.graph.getRandomEmptyTile());
+		entities.push(power);
+		entitiesMap["powerups"].push(power);
 	}
 
 	
 }
 
-function gamePlayLoop() {
+function checkHealth(deltaTime) {
+	if (player.health1 != 3) {
+		
+	}
+}
+
+function checkCollisions() {
+
+	for ( let i = 0; i < entitiesMap["coins"].length; i++) {
+		let coin = entitiesMap["coins"][i];
+
+	}
+}
+
+function gamePlayLoop(deltaTime) {
 	//to check how many coins are there and spawn some more if required
-	checkSpawns()
+	checkSpawns(deltaTime);
 
 	//check health pop ups and spawn more if required
 	checkHealth()
@@ -179,13 +208,25 @@ function animate() {
 	let deltaTime = clock.getDelta();
 
 
-	gamePlayLoop(deltaTime)
+
+	gamePlayLoop(deltaTime);
 
 
 	player.update(deltaTime, gameMap, controller);
-	npc1.update(deltaTime, gameMap,player);
-	npc2.update(deltaTime, gameMap,player);
-	npc3.update(deltaTime, gameMap,player);
+	for (let i = 0; i < entitiesMap["enemies"].length;i++) {
+		entitiesMap["enemies"][i].update(deltaTime, gameMap, player);
+
+	}
+
+	for (let i = 0; i < entitiesMap["powerups"].length;i++) {
+		entitiesMap["powerups"][i].update(deltaTime, gameMap);
+		
+	}
+
+	for (let i = 0; i < entitiesMap["coins"].length;i++) {
+		entitiesMap["coins"][i].update(deltaTime, gameMap);
+		
+	}
 
 	if (!player.isAlive()) { 
         gameOver = true;
@@ -195,6 +236,12 @@ function animate() {
 
 
 	orbitControls.update();
+
+	let timeElapsed = clock.getElapsedTime();
+	// console.log(Math.trunc(timeElapsed));
+	if (Math.trunc(timeElapsed) % 5 == 0) {
+		//console.log(entitiesMap);
+	}
 }
 
 

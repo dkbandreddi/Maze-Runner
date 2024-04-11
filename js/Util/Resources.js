@@ -38,8 +38,8 @@ export class Resources {
                 file.name, 
                 file.url
             ).then(([name, data]) => {
-                console.log(name);
-                console.log(data);
+                //console.log(name);
+                //console.log(data);
                 this.dict[name] = data;
             });
             

@@ -150,4 +150,9 @@ export class GameMap {
     path.unshift(startNode); // Add the start node at the beginning
     return path;
   }
+
+
+  setTileType(node) {
+	  this.mapRenderer.createTile(node);	
+	}
 }

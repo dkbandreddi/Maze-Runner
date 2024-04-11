@@ -45,7 +45,7 @@ export class Character {
 		// but for now we will just use one dimension as "size"
 		// (this would work better if the model is square)
 		let dz = bbox.max.z-bbox.min.z;
-
+		
 		// Scale the object based on how
 		// large we want it to be
 		let scale = this.size/dz;
