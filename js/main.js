@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GameMap } from './Game/World/GameMap.js';
 import { Character } from './Game/Behaviour/Character.js';
-import {  NPC, WanderState } from './Game/Behaviour/NPC.js';
+import {  NPC, WanderState, FleeState } from './Game/Behaviour/NPC.js';
 import { Player } from './Game/Behaviour/Player.js';
 import { Controller} from './Game/Behaviour/Controller.js';
 import { Resources } from './Util/Resources.js';
@@ -272,9 +272,11 @@ function checkCollisions() {
 			let powerup = entitiesMap["powerups"][i];
 			const distanceToPlayer = powerup.location.distanceTo(player.location);
 			if (distanceToPlayer < 2) { 
-				activatePowerUp();
+				
+
 				scene.remove(powerup.gameObject); 
 				entitiesMap["powerups"].splice(i, 1); 
+				activatePowerUp();
 			}
 	}
 	// if (powerUpActive) {
@@ -296,7 +298,7 @@ function activatePowerUp() {
     powerUpActive = true;
     gameMap.mapRenderer.changeGroundColor(0xff0000); // Change ground to red
 	player.addlife();
-	//entitiesMap["enemies"].forEach(npc => npc.switchState(new FleeState()));
+	entitiesMap["enemies"].forEach(npc => npc.switchState(new FleeState()));
 
     setTimeout(() => {
         powerUpActive = false;

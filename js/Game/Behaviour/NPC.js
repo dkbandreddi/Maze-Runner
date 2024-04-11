@@ -2,6 +2,8 @@ import * as THREE from "three";
 import { VectorUtil } from "../../Util/VectorUtil.js";
 import { Character } from "./Character.js";
 import { State } from "./State";
+
+var time = 0;
 export class NPC extends Character {
   // Character Constructor
   constructor(mColor, gameMap, player, id) {
@@ -64,7 +66,9 @@ export class NPC extends Character {
 }
 
 export class WanderState extends State {
-  enterState(npc, deltaTime) {}
+  enterState(npc, deltaTime) {
+    console.log("NPC is now in WanderState")
+  }
 
   updateState(npc, deltaTime, gameMap, player) {
     if (npc.currentPath && npc.currentPath.points.length > 0) {
@@ -154,24 +158,51 @@ export class PursueState extends State {
   }
 }
 
-// export class FleeState extends State {
-//   constructor() {
-//       super();
-//       this.fleeDistance = 10;
-//   }
+export class FleeState extends State {
+ constructor() {
+       super();
+       this.fleeDistance = 10;
+  }
 
-//   enterState(npc) {
-//       console.log("NPC is now in FleeState");
-//   }
+   enterState(npc) {
+    console.log("NPC is now in FleeState");
+    time = 0;
+  }
 
-//   updateState(npc, deltaTime, gameMap, player) {
-//       const distanceToPlayer = npc.location.distanceTo(player.location);
-//       if (distanceToPlayer <= this.fleeDistance) {
-//           const evasionForce = npc.evade(player, 0.5);
-//           npc.applyForce(evasionForce);
-//       } else {
-//           npc.switchState(new WanderState()); 
-//       }
-//   }
-// }
+   updateState(npc, deltaTime, gameMap, player) {
+    time = time + deltaTime;
+    
+
+    npc.applyForce(npc.evade(player, deltaTime));
+
+    const distanceToPlayer = npc.location.distanceTo(player.location);
+    if (distanceToPlayer < 3) {
+      const EnemyNode = gameMap.quantize(npc.location);
+      gameMap.setTileType(EnemyNodeNode);
+      const newEnemyNode = gameMap.graph.getRandomEmptyTile();
+      //player.loseLife();
+      npc.location.copy(gameMap.localize(newPlayerNode));
+      npc.velocity.set(0, 0, 0);
+      //npc.pursuingPlayer = false;
+      //npc.switchState(new WanderState(), deltaTime);
+    }
+    /*
+    const distanceToPlayer = npc.location.distanceTo(player.location);
+    
+    if (distanceToPlayer <= this.fleeDistance) {
+        const evasionForce = npc.evade(player, 0.5);
+        npc.applyForce(evasionForce);
+    } else {
+        npc.switchState(new WanderState()); 
+    }
+
+
+    */
+    if (time > 8) {
+
+      npc.switchState(new WanderState()); 
+      time = 0
+    }
+  }
+ }
 
