@@ -178,10 +178,10 @@ export class FleeState extends State {
     const distanceToPlayer = npc.location.distanceTo(player.location);
     if (distanceToPlayer < 3) {
       const EnemyNode = gameMap.quantize(npc.location);
-      gameMap.setTileType(EnemyNodeNode);
+      gameMap.setTileType(EnemyNode);
       const newEnemyNode = gameMap.graph.getRandomEmptyTile();
       //player.loseLife();
-      npc.location.copy(gameMap.localize(newPlayerNode));
+      npc.location.copy(gameMap.localize(newEnemyNode));
       npc.velocity.set(0, 0, 0);
       //npc.pursuingPlayer = false;
       //npc.switchState(new WanderState(), deltaTime);
