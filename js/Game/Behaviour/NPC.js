@@ -113,6 +113,7 @@ export class PursueState extends State {
     }
 
     const distanceToPlayer = npc.location.distanceTo(player.location);
+    // if the distance is less than 5, pursue behavior is used.
     if (distanceToPlayer <= 5) {
       const pursuitSteer = npc.pursue(player, 0.1);
       npc.applyForce(pursuitSteer);
@@ -153,13 +154,24 @@ export class PursueState extends State {
   }
 }
 
-export class CoinState extends State {
-  enterState() {
-		
-	}
+// export class FleeState extends State {
+//   constructor() {
+//       super();
+//       this.fleeDistance = 10;
+//   }
 
-	updateState(npc, deltaTime, gameMap, player) {
-		
-	}
-}
+//   enterState(npc) {
+//       console.log("NPC is now in FleeState");
+//   }
+
+//   updateState(npc, deltaTime, gameMap, player) {
+//       const distanceToPlayer = npc.location.distanceTo(player.location);
+//       if (distanceToPlayer <= this.fleeDistance) {
+//           const evasionForce = npc.evade(player, 0.5);
+//           npc.applyForce(evasionForce);
+//       } else {
+//           npc.switchState(new WanderState()); 
+//       }
+//   }
+// }
 

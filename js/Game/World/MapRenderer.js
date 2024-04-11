@@ -12,6 +12,7 @@ export class MapRenderer {
 
 		this.groundGeometries = new THREE.BoxGeometry(0,0,0);
 		this.wallGeometries = new THREE.BoxGeometry(0,0,0);
+		this.groundMaterial = new THREE.MeshStandardMaterial({ color: 0x0000ff });
 	
 	}
 
@@ -23,12 +24,11 @@ export class MapRenderer {
 
 		}
 
-		let groundMaterial = new THREE.MeshStandardMaterial({ color: 0x0000ff }); // Blue for ground
         let wallMaterial = new THREE.MeshStandardMaterial({ color: 0xffff00 }); // Yellow for walls
 
 
 		let gameObject = new THREE.Group();
-		let ground = new THREE.Mesh(this.groundGeometries, groundMaterial);
+		let ground = new THREE.Mesh(this.groundGeometries, this.groundMaterial);
 		let walls = new THREE.Mesh(this.wallGeometries, wallMaterial);
 
 		gameObject.add(ground);
@@ -128,6 +128,9 @@ export class MapRenderer {
 		this.flowfieldGraphics.add(new THREE.Mesh( geometry, material ));
 		
 	}
+	changeGroundColor(colorHex) {
+        this.groundMaterial.color.set(colorHex);
+    }
 
 
 }
