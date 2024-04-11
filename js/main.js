@@ -5,11 +5,8 @@ import { Character } from './Game/Behaviour/Character.js';
 import { NPC } from './Game/Behaviour/NPC.js';
 import { Player } from './Game/Behaviour/Player.js';
 import { Controller} from './Game/Behaviour/Controller.js';
-import { TileNode } from './Game/World/TileNode.js';
 import { Resources } from './Util/Resources.js';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { Spawn } from './Game/Behaviour/Spawn.js';
-import { PLYLoader } from 'three/examples/jsm/Addons.js';
+import { Spawn } from './Game/Behaviour/spawn.js';
 
 // a master array to store references to all entities on map
 var entities = []
@@ -76,14 +73,14 @@ function setup() {
 
 	document.getElementById('timer').innerText = `Timer: ${timeLeft}`;
     document.getElementById('lives').innerText = `Lives: 3`; 
-	document.getElementById('score').innerText = `Score: 0`; 
+	document.getElementById('score').innerText = `Score: 0/5`; 
     setInterval(() => {
         if (!gameOver && timeLeft > 0) {
             timeLeft--;
             document.getElementById('timer').innerText = `Timer: ${timeLeft}`;
         } else if (timeLeft === 0) {
             gameOver = true;
-            alert("Time's up! Player won! Refresh page to start new game");
+            alert("Time's up! Player Lost! Refresh page to start new game");
         }
     }, 1000);
 
@@ -111,7 +108,6 @@ function setup() {
 	id += 1;
 	player.size = 3.5;
 	player.setModel(resource.get("pacman2"));
-	//console.log(player);
 	entities.push(player)
 	entitiesMap["player"].push(player);
 
@@ -205,10 +201,7 @@ function checkSpawns(deltaTime) {
 		entitiesMap["powerups"].push(power);
 
 		scene.add(power.gameObject);
-	}
-	
-
-	
+	}	
 }
 
 function checkHealth(deltaTime) {
@@ -217,44 +210,56 @@ function checkHealth(deltaTime) {
 	}
 }
 
+// function checkCollisions() {
+
+// 	for ( let i = entitiesMap["coins"].length - 1; i >= 0; i--) {
+// 		let coin = entitiesMap["coins"][i];
+// 		const distanceToPlayer = coin.location.distanceTo(player.location);
+// 		if (distanceToPlayer < 2) {
+// 			//delete coin from map
+// 			let deletedId = entitiesMap["coins"][i].id;
+// 			let deletedObject = entitiesMap["coins"].splice(i, i);
+// 			//delte from 
+// 			for ( let j = 0; j < entities.length; j++) {
+// 				if (entities[j].id == deletedId) {
+			
+// 					entities.splice(j, j);
+// 				}
+// 			}
+// 			//add score
+// 			player.addScore();
+
+// 			//update scene
+// 			let index = i + 1;
+// 			console.log("deleting", "coin".concat(index.toString()))
+// 			let toD = scene.getObjectByName("coin".concat(index.toString()));
+			
+
+// 			console.log("to be delete", deletedId);
+// 			console.log(entities);
+// 			console.log(entitiesMap);
+// 			console.log(toD);
+//     		scene.remove(toD);
+// 			const coinNode = gameMap.quantize(player.location);
+//       		gameMap.setTileType(coinNode);
+// 			//animate();
+// 		}
+// 	}
+// }
 function checkCollisions() {
+    for (let i = entitiesMap["coins"].length - 1; i >= 0; i--) {
+        let coin = entitiesMap["coins"][i];
+        if (coin.collected) continue; 
 
-	for ( let i = entitiesMap["coins"].length - 1; i >= 0; i--) {
-		let coin = entitiesMap["coins"][i];
-		const distanceToPlayer = coin.location.distanceTo(player.location);
-		if (distanceToPlayer < 2) {
-			
-			
-			//delete coin from map
-			let deletedId = entitiesMap["coins"][i].id;
-			let deletedObject = entitiesMap["coins"].splice(i, i);
-			//delte from 
-			for ( let j = 0; j < entities.length; j++) {
-				if (entities[j].id == deletedId) {
-			
-					entities.splice(j, j);
-				}
-			}
-			//add score
-			player.addScore();
-
-			//update scene
-			let index = i + 1;
-			console.log("deleting", "coin".concat(index.toString()))
-			let toD = scene.getObjectByName("coin".concat(index.toString()));
-			
-
-			console.log("to be delete", deletedId);
-			console.log(entities);
-			console.log(entitiesMap);
-			console.log(toD);
-    		scene.remove(toD);
-			const coinNode = gameMap.quantize(player.location);
-      		gameMap.setTileType(coinNode);
-			//animate();
-		}
-	}
+        const distanceToPlayer = coin.location.distanceTo(player.location);
+        if (distanceToPlayer < 2) {
+            player.addScore();
+            scene.remove(coin.gameObject);
+            entitiesMap["coins"].splice(i, 1); 
+        }
+    }
 }
+
 
 function gamePlayLoop(deltaTime) {
 	//to check how many coins are there and spawn some more if required
@@ -304,6 +309,12 @@ function animate() {
         alert("Game Over: Player lost all lives!. Refresh page to start new game");
         return; 
     }
+	if (player.isScoreReached()) { 
+        gameOver = true;
+        alert("Game Over: Player Won. Refresh page to start new game");
+        return; 
+    }
+
 
 
 	orbitControls.update();

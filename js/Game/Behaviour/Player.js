@@ -31,6 +31,9 @@ export class Player extends Character {
 	isAlive() {
         return this.lives > 0;
     }
+	isScoreReached(){
+		return this.score >= 5;
+	}
 
 	switchState(state) {
 		this.state = state;

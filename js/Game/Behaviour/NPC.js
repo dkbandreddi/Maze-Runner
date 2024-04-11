@@ -114,12 +114,10 @@ export class PursueState extends State {
 
     const distanceToPlayer = npc.location.distanceTo(player.location);
     if (distanceToPlayer <= 5) {
-      console.log(" pursuing player ");
       const pursuitSteer = npc.pursue(player, 0.1);
       npc.applyForce(pursuitSteer);
     }
     if (distanceToPlayer < 3) {
-      console.log(" player found");
       const playerNode = gameMap.quantize(player.location);
       gameMap.setTileType(playerNode);
       const newPlayerNode = gameMap.graph.getRandomEmptyTile();
