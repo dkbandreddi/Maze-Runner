@@ -154,3 +154,14 @@ export class PursueState extends State {
     }
   }
 }
+
+export class CoinState extends State {
+  enterState() {
+		
+	}
+
+	updateState(npc, deltaTime, gameMap, player) {
+		
+	}
+}
+

@@ -1,14 +1,12 @@
 import { Character } from "./Character.js";
 
-export class Spawn extends Character{
-    constructor(mColor, type, model) {
+export class Spawn extends Character {
+    constructor(mColor, type) {
         super(mColor);
-        if (model){
-            super.setModel(model);
-        }
+        
         
         // add more initialization
-
+        this.frictionMagnitude = 20;
         this.type = type;
     
     }

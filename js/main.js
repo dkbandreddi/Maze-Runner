@@ -9,6 +9,7 @@ import { TileNode } from './Game/World/TileNode.js';
 import { Resources } from './Util/Resources.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { Spawn } from './Game/Behaviour/Spawn.js';
+import { PLYLoader } from 'three/examples/jsm/Addons.js';
 
 // a master array to store references to all entities on map
 var entities = []
@@ -20,8 +21,6 @@ var entitiesMap = {
 	"enemies" : []
 }
 
-var spawns = []
-var enemies = []
 
 async function getData(url) {
 	const response = await fetch(url);
@@ -54,13 +53,12 @@ let player;
 let npc1;
 let npc2;
 let npc3;
+
+
 let gameOver;
 let timeLeft = 120;
 
-//default spawns
-let coin1;
-let health1;
-let powerup1;
+
 
 
 
@@ -106,28 +104,40 @@ function setup() {
 	
 	// Create Player
 	player = new Player(new THREE.Color(0xff0000));
-	player.setModel(resource.get("sportscar"));
+	player.setModel(resource.get("pacman2"));
 	console.log(player);
 	entities.push(player)
 
 	npc1 = new NPC(new THREE.Color(0xff0000),gameMap, player);
-	npc1.setModel(resource.get("enemy"));
+	npc1.setModel(resource.get("ghost pacman"));
 	npc1.location = gameMap.localize(gameMap.graph.getRandomEmptyTile());
 	entities.push(npc1)
 	entitiesMap["enemies"].push(npc1);
 	
 	npc2 = new NPC(new THREE.Color(0xff0000),gameMap, player);
-	npc2.setModel(resource.get("powerup"));
+	npc2.setModel(resource.get("ghost yellow"));
 	npc2.location = gameMap.localize(gameMap.graph.getRandomEmptyTile());
 	entities.push(npc2)
 	entitiesMap["enemies"].push(npc2);
+
+	/*
+	let coin = new Spawn(new THREE.Color(0x00ff00), "coin");
+	coin.setModel(resource.get("roman coin"));
+	coin.location = gameMap.localize(gameMap.graph.getRandomEmptyTile());
+	entities.push(coin);
+	entitiesMap["coins"].push(coin);
+	*/
 	
-	npc3 = new NPC(new THREE.Color(0xff0000),gameMap, player);
-	npc3.setModel(resource.get("bigenemy"));
+	
+	/*
+	npc3 = new Spawn(new THREE.Color(0xff0000),"coin");
+	npc3.setModel(resource.get("coin"));
+	npc3.size = 0.01;
 	npc3.location = gameMap.localize(gameMap.graph.getRandomEmptyTile());
 
 	entities.push(npc3)
 	entitiesMap["enemies"].push(npc3);
+	*/
 
 	// Add all entities to the scene
 	for(let i=0; i < entities.length; i++) {
@@ -149,16 +159,24 @@ function checkSpawns(deltaTime) {
 	var secs = clock.getElapsedTime();
 	var flag = Math.trunc(secs) % 7 == 0;
 
-	if (flag && entitiesMap["coins"].length <= 2) {
-		//console.log("making coin");
-		let m = resource.get("sportscar");
+	
+	if (flag && entitiesMap["coins"].length <= 3) {
+		
+		console.log("making a coin")
 		let coin = new Spawn(new THREE.Color(0x00ff00), "coin");
+		coin.size = 0.5;
+		coin.setModel(resource.get("coin2"));
+
 		coin.location = gameMap.localize(gameMap.graph.getRandomEmptyTile());
-		console.log(coin);
+		
+		
 		entities.push(coin);
 		entitiesMap["coins"].push(coin);
+	
+		scene.add(coin.gameObject);
 	}
 
+	
 	if (entitiesMap["powerups"].length == 0 && Math.trunc(secs) % 25 == 0){
 		//spawn a powerup
 		//console.log("making powerup");
@@ -168,7 +186,10 @@ function checkSpawns(deltaTime) {
 		power.location = gameMap.localize(gameMap.graph.getRandomEmptyTile());
 		entities.push(power);
 		entitiesMap["powerups"].push(power);
+
+		scene.add(power.gameObject);
 	}
+	
 
 	
 }
@@ -192,10 +213,10 @@ function gamePlayLoop(deltaTime) {
 	checkSpawns(deltaTime);
 
 	//check health pop ups and spawn more if required
-	checkHealth()
+	//checkHealth()
 
 	//check collisions. esp between coins/health with player.
-	checkCollisions()
+	//checkCollisions()
 
 }
 
@@ -224,10 +245,12 @@ function animate() {
 	}
 
 	for (let i = 0; i < entitiesMap["coins"].length;i++) {
+	
 		entitiesMap["coins"][i].update(deltaTime, gameMap);
 		
 	}
 
+	
 	if (!player.isAlive()) { 
         gameOver = true;
         alert("Game Over: Player lost all lives!. Refresh page to start new game");

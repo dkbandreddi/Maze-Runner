@@ -26,6 +26,38 @@
     {
         "name" : "coin",
         "url" : "./models/coin.gltf"
+    },
+    {
+        "name" : "coin1",
+        "url" : "./models/coin1.fbx"
+    },
+    {
+        "name" : "coin2",
+        "url" : "./models/coin2.glb"
+    },
+    {
+        "name" : "girl pacman",
+        "url" : "./models/girl_pacman_animated.glb"
+    },
+    {
+        "name" : "ghost pacman",
+        "url" : "./models/pacman_ghost_inky.glb"
+    },
+    {
+        "name" : "roman coin",
+        "url" : "./models/roman_coin.glb"
+    },
+    {
+        "name" : "ghost yellow",
+        "url" : "./models/pacman_ghost_yellow.glb"
+    },
+    {
+        "name" : "pacman2",
+        "url" : "./models/pacman.glb"
+    },
+    {
+        "name" : "coin3",
+        "url" : "./models/coin3.glb"
     }
 
    

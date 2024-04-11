@@ -81,6 +81,7 @@ export class Character {
 	checkEdges(gameMap) {
 
 		let node = gameMap.quantize(this.location);
+	
 		let nodeLocation = gameMap.localize(node);
 
   		if (!node.hasEdgeTo(node.x-1, node.z)) {
