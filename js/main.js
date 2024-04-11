@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GameMap } from './Game/World/GameMap.js';
 import { Character } from './Game/Behaviour/Character.js';
-import { NPC } from './Game/Behaviour/NPC.js';
+import {  NPC, WanderState } from './Game/Behaviour/NPC.js';
 import { Player } from './Game/Behaviour/Player.js';
 import { Controller} from './Game/Behaviour/Controller.js';
 import { Resources } from './Util/Resources.js';
@@ -55,6 +55,7 @@ let npc3;
 
 let gameOver;
 let timeLeft = 120;
+let powerUpActive =  false;
 
 
 
@@ -267,6 +268,41 @@ function checkCollisions() {
             entitiesMap["coins"].splice(i, 1); 
         }
     }
+	for (let i = entitiesMap["powerups"].length - 1; i >= 0; i--) {
+			let powerup = entitiesMap["powerups"][i];
+			const distanceToPlayer = powerup.location.distanceTo(player.location);
+			if (distanceToPlayer < 2) { 
+				activatePowerUp();
+				scene.remove(powerup.gameObject); 
+				entitiesMap["powerups"].splice(i, 1); 
+			}
+	}
+	// if (powerUpActive) {
+    //     for (let i = entitiesMap["enemies"].length - 1; i >= 0; i--) {
+    //         let npc = entitiesMap["enemies"][i];
+    //         const distanceToPlayer = npc.location.distanceTo(player.location);
+    //         if (distanceToPlayer < 2) { 
+    //             scene.remove(npc.gameObject);
+    //             entitiesMap["enemies"].splice(i, 1);
+    //             console.log("NPC removed due to power-up effect");
+    //         }
+    //     }
+    // }
+
+	
+}
+
+function activatePowerUp() {
+    powerUpActive = true;
+    gameMap.mapRenderer.changeGroundColor(0xff0000); // Change ground to red
+	player.addlife();
+	//entitiesMap["enemies"].forEach(npc => npc.switchState(new FleeState()));
+
+    setTimeout(() => {
+        powerUpActive = false;
+	//	entitiesMap["enemies"].forEach(npc => npc.switchState(new WanderState()));
+        gameMap.mapRenderer.changeGroundColor(0x0000ff); // Revert ground color
+    }, 1000);
 }
 
 

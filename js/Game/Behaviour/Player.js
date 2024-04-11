@@ -23,6 +23,10 @@ export class Player extends Character {
 		}
 		return false; // Player still has lives left
 	}
+	addlife(){
+		this.lives += 1;
+		document.getElementById('lives').innerText = `Lives: ${this.lives}`;
+	}
 	addScore() {
 		this.score += 1;
 		document.getElementById('score').innerText = `Score: ${this.score}`;

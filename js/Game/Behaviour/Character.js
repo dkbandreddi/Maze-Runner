@@ -156,7 +156,16 @@ export class Character {
 		return this.seek(target);
 
 	}
+	flee(target) {
+		let flee = this.seek(target).multiplyScalar(-1);
+		return flee;
+	}
 	
+	evade(character, time) {
+		let evade = this.pursue(character, time).multiplyScalar(-1);
+		return evade;
+	}
+
 
 	pursue(character, time) {
 		let prediction = new THREE.Vector3(0,0,0);
