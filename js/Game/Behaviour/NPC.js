@@ -6,9 +6,9 @@ export class NPC extends Character {
   // Character Constructor
   constructor(mColor, gameMap, player) {
     super(mColor);
-    this.gameMap = gameMap; // Reference to the GameMap instance for pathfinding
+    this.gameMap = gameMap;
     this.player = player;
-    this.currentPath = { points: [] }; // Initialize currentPath with an empty points array
+    this.currentPath = { points: [] };
     this.state = new WanderState();
     this.state.enterState(this);
   }
@@ -20,7 +20,6 @@ export class NPC extends Character {
   }
 
   update(deltaTime, gameMap, player) {
-    console.log(player);
     super.update(deltaTime, gameMap);
     if (this.state) {
       this.state.updateState(this, deltaTime, gameMap, player);
@@ -28,13 +27,12 @@ export class NPC extends Character {
   }
   calculateNewPath() {
     const startNode = this.gameMap.quantize(this.location);
-    const endNode = this.gameMap.graph.getRandomEmptyTile(); // For example, change as needed
+    const endNode = this.gameMap.graph.getRandomEmptyTile();
     const pathArray = this.gameMap.astar(startNode, endNode);
     const pathPoints = pathArray.map((node) => this.gameMap.localize(node));
     this.currentPath = { points: pathPoints };
-    this.segment = 0; // Reset segment index if needed
+    this.segment = 0;
 
-    // New: Render the path on the map
     this.gameMap.renderPath(pathArray);
   }
 
@@ -66,35 +64,25 @@ export class NPC extends Character {
 }
 
 export class WanderState extends State {
-  enterState(npc, deltaTime) {
-    // Initialization specific to the WanderState can go here
-  }
+  enterState(npc, deltaTime) {}
 
   updateState(npc, deltaTime, gameMap, player) {
-    // Follow the current path if it exists
     if (npc.currentPath && npc.currentPath.points.length > 0) {
       const steeringForce = npc.simpleFollow(
         npc.currentPath,
         gameMap.tileSize / 2
       );
       npc.applyForce(steeringForce);
-      // Check if the current segment is the last one in the path
       if (npc.segment >= npc.currentPath.points.length - 1) {
-        // Calculate a new path once the current path is completed
         npc.calculateNewPath();
       }
     } else {
-      // No current path, calculate a new path
       npc.calculateNewPath();
     }
 
-    // Check for proximity to the player to switch to the PursueState
     const distanceToPlayer = npc.location.distanceTo(player.location);
-    const pursuitThreshold = 30; // Distance threshold to start pursuing the player
-    console.log(distanceToPlayer);
+    const pursuitThreshold = 30;
     if (distanceToPlayer <= pursuitThreshold) {
-      // Switch to PursueState
-
       npc.switchState(new PursueState(), deltaTime);
     }
   }
@@ -102,9 +90,7 @@ export class WanderState extends State {
 
 export class PursueState extends State {
   enterState(npc) {
-    // Set flag to indicate pursuit is active
     npc.pursuingPlayer = true;
-    //  calculate a path to start pursuit
     this.recalculatePath(npc, npc.gameMap, npc.player);
   }
   updateState(npc, deltaTime, gameMap, player) {
@@ -115,15 +101,33 @@ export class PursueState extends State {
       npc.segment >= npc.currentPath.points.length - 1 ||
       this.shouldRecalculatePath(npc, player)
     ) {
-      // Recalculate the path to the player
       this.recalculatePath(npc, gameMap, player);
     }
+
     if (npc.currentPath && npc.currentPath.points.length > 0) {
       const steeringForce = npc.simpleFollow(
         npc.currentPath,
         gameMap.tileSize / 2
       );
       npc.applyForce(steeringForce);
+    }
+
+    const distanceToPlayer = npc.location.distanceTo(player.location);
+    if (distanceToPlayer <= 5) {
+      console.log(" pursuing player ");
+      const pursuitSteer = npc.pursue(player, 0.1);
+      npc.applyForce(pursuitSteer);
+    }
+    if (distanceToPlayer < 3) {
+      console.log(" player found");
+      const playerNode = gameMap.quantize(player.location);
+      gameMap.setTileType(playerNode);
+      const newPlayerNode = gameMap.graph.getRandomEmptyTile();
+      player.loseLife();
+      player.location.copy(gameMap.localize(newPlayerNode));
+      player.velocity.set(0, 0, 0);
+      npc.pursuingPlayer = false;
+      npc.switchState(new WanderState(), deltaTime);
     }
   }
 
@@ -149,12 +153,4 @@ export class PursueState extends State {
       npc.lastPlayerPosition = player.location.clone();
     }
   }
-}
-
-
-
-export class EvadeState extends State {
-  enterState() {}
-
-  updateState() {}
 }

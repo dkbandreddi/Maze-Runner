@@ -54,6 +54,8 @@ let player;
 let npc1;
 let npc2;
 let npc3;
+let gameOver;
+let timeLeft = 120;
 
 //default spawns
 let coin1;
@@ -70,6 +72,19 @@ await resource.loadAll();
 
 // Setup our scene
 function setup() {
+	gameOver = false;
+
+	document.getElementById('timer').innerText = `Timer: ${timeLeft}`;
+    document.getElementById('lives').innerText = `Lives: 3`; 
+    setInterval(() => {
+        if (!gameOver && timeLeft > 0) {
+            timeLeft--;
+            document.getElementById('timer').innerText = `Timer: ${timeLeft}`;
+        } else if (timeLeft === 0) {
+            gameOver = true;
+            alert("Time's up! Player won! Refresh page to start new game");
+        }
+    }, 1000);
 
 	scene.background = new THREE.Color(0xffffff);
 	renderer.setSize(window.innerWidth, window.innerHeight);
@@ -87,6 +102,7 @@ function setup() {
 	gameMap = new GameMap();
 	gameMap.init(scene);
 	scene.add(gameMap.gameObject);
+	
 	
 	// Create Player
 	player = new Player(new THREE.Color(0xff0000));
@@ -108,6 +124,7 @@ function setup() {
 	npc3 = new NPC(new THREE.Color(0xff0000),gameMap, player);
 	npc3.setModel(resource.get("bigenemy"));
 	npc3.location = gameMap.localize(gameMap.graph.getRandomEmptyTile());
+
 	entities.push(npc3)
 	enemies.push(npc3)
 
@@ -116,16 +133,12 @@ function setup() {
 		scene.add(entities[i].gameObject);
 	}
 
+
+
 	// Get a random starting place for the enemy
 	let startPlayer = gameMap.graph.getRandomEmptyTile();
-
-
 	// this is where we start the player
 	player.location = gameMap.localize(startPlayer);
-
-
-
-
 	//First call to animate
 	animate();
 	
@@ -159,17 +172,27 @@ function gamePlayLoop() {
 
 // animate
 function animate() {
+	if (gameOver) return; 
 	requestAnimationFrame(animate);
 	renderer.render(scene, camera);
 	
 	let deltaTime = clock.getDelta();
 
+
 	gamePlayLoop(deltaTime)
+
 
 	player.update(deltaTime, gameMap, controller);
 	npc1.update(deltaTime, gameMap,player);
-	// npc2.update(deltaTime, gameMap,player);
-	// npc3.update(deltaTime, gameMap,player);
+	npc2.update(deltaTime, gameMap,player);
+	npc3.update(deltaTime, gameMap,player);
+
+	if (!player.isAlive()) { 
+        gameOver = true;
+        alert("Game Over: Player lost all lives!. Refresh page to start new game");
+        return; 
+    }
+
 
 	orbitControls.update();
 }

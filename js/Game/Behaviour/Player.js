@@ -5,6 +5,7 @@ export class Player extends Character {
 
 	constructor(colour) {
 		super(colour);
+		this.lives = 3;
 		this.frictionMagnitude = 20;
 
 		// State
@@ -12,6 +13,18 @@ export class Player extends Character {
 
 		this.state.enterState(this);
 	}
+	loseLife() {
+		this.lives -= 1;
+		document.getElementById('lives').innerText = `Lives: ${this.lives}`;
+		console.log(" number of lives " +  this.lives);
+		if (this.lives <= 0) {
+			return true; // Player lost all lives
+		}
+		return false; // Player still has lives left
+	}
+	isAlive() {
+        return this.lives > 0;
+    }
 
 	switchState(state) {
 		this.state = state;
@@ -40,8 +53,6 @@ export class IdleState extends State {
 	}
 
 }
-
-
 
 export class MovingState extends State {
 
