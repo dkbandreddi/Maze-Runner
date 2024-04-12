@@ -2,6 +2,9 @@ import * as THREE from "three";
 import { VectorUtil } from "../../Util/VectorUtil.js";
 import { Character } from "./Character.js";
 import { State } from "./State";
+
+var time = 0;
+
 export class NPC extends Character {
   // Character Constructor
   constructor(mColor, gameMap, player, id) {
@@ -73,7 +76,9 @@ export class NPC extends Character {
 }
 
 export class WanderState extends State {
-  enterState(npc, deltaTime) {}
+  enterState(npc, deltaTime) {
+    console.log("NPC is now in WanderState")
+  }
 
 
   updateState(npc, deltaTime, gameMap, player) {
