@@ -11,7 +11,7 @@ Implemented Topics
 1)Maze Generation: A random maze is procedurally generated for each game session using Depth First Maze Generation.
 2)Pathfinding: NPCs use  the A* algorithm for pathfinding in the maze. The path can also be visible for a npc which is depicted by red circles which would make it easier for the player
 to steer clear from the npc and also help navigate through the maze.
-3) Steering Behaviors: The Steerinf behavior used are the wander, pursue simple path following and also evade. THe NPCs pursue the player or wander using steering behaviors and follow 
+3) Steering Behaviors: The Steering behavior used are the wander, pursue simple path following and also evade. THe NPCs pursue the player or wander using steering behaviors and follow 
 the path provided by the A* algorithm.
 4) Player-NPC Interaction: NPCs wanders around the maze and upon the player being in the vicinity of the npc it calculates a path shortest to the player and follows that path
 when the npc is close to the player it uses the pursue behavior to kill the player. upon killing the player the player then spawns randomly in the map with a life decreamented. 
@@ -46,9 +46,13 @@ when its in the vicinity of the npc.
 - Added functionality to look at the path provided by the A* which is followed by the NPC.
 
 Mehul
--  ⁠managing, sourcing assets for various entities
+-  sourcing assets for various entities (NPC, Player, Coins, Powerup). As well as created systems around for managing the resources and assets and load them to be able to use during gamePlay Loop.
   
--  ⁠creation of game loop to add game play objects for progression.
+- Creation of game loop and functions for adding game play objects for progression (coins, powerups). also added collision method and subsequent functions for player and coin.
+
+- implemented the score board and management of score.
+
+- implemented FleeState(Evade) to run in opposite direction of player during a immunity period 
 
 
 

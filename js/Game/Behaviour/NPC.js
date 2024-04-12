@@ -189,18 +189,7 @@ export class FleeState extends State {
       player.addScore();
       
     }
-    /*
-    const distanceToPlayer = npc.location.distanceTo(player.location);
     
-    if (distanceToPlayer <= this.fleeDistance) {
-        const evasionForce = npc.evade(player, 0.5);
-        npc.applyForce(evasionForce);
-    } else {
-        npc.switchState(new WanderState()); 
-    }
-
-
-    */
     if (time > 8) {
 
       npc.switchState(new WanderState()); 
