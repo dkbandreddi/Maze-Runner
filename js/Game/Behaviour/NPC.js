@@ -185,6 +185,9 @@ export class FleeState extends State {
       npc.velocity.set(0, 0, 0);
       //npc.pursuingPlayer = false;
       //npc.switchState(new WanderState(), deltaTime);
+      
+      player.addScore();
+      
     }
     /*
     const distanceToPlayer = npc.location.distanceTo(player.location);
@@ -201,6 +204,7 @@ export class FleeState extends State {
     if (time > 8) {
 
       npc.switchState(new WanderState()); 
+      gameMap.mapRenderer.changeGroundColor(0x0000ff);
       time = 0
     }
   }

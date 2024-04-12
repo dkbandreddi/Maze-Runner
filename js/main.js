@@ -168,7 +168,7 @@ function setup() {
 function checkSpawns(deltaTime) {
 	var secs = clock.getElapsedTime();
 	totaltime = totaltime + deltaTime;
-	if (totaltime > 3) {
+	if (totaltime > 5) {
 		var flag = true
 		totaltime = 0;
 	}
@@ -300,12 +300,15 @@ function activatePowerUp() {
 	player.addlife();
 	entitiesMap["enemies"].forEach(npc => npc.switchState(new FleeState()));
 
+	/*
     setTimeout(() => {
         powerUpActive = false;
 	//	entitiesMap["enemies"].forEach(npc => npc.switchState(new WanderState()));
         gameMap.mapRenderer.changeGroundColor(0x0000ff); // Revert ground color
     }, 1000);
+	*/;
 }
+
 
 
 function gamePlayLoop(deltaTime) {
