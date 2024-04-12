@@ -149,7 +149,7 @@ function setup() {
 function checkSpawns(deltaTime) {
 	var secs = clock.getElapsedTime();
 	totaltime = totaltime + deltaTime;
-	if (totaltime > 5) {
+	if (totaltime > 4) {
 		var flag = true
 		totaltime = 0;
 	}
