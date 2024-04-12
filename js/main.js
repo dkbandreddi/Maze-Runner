@@ -137,9 +137,6 @@ function setup() {
 		
 		scene.add(entities[i].gameObject);
 	}
-
-
-
 	// Get a random starting place for the enemy
 	let startPlayer = gameMap.graph.getRandomEmptyTile();
 	// this is where we start the player
@@ -198,7 +195,6 @@ function checkSpawns(deltaTime) {
 	}	
 }
 
-
 function checkCollisions() {
     for (let i = entitiesMap["coins"].length - 1; i >= 0; i--) {
         let coin = entitiesMap["coins"][i];
@@ -222,9 +218,6 @@ function checkCollisions() {
 				activatePowerUp();
 			}
 	}
-	
-
-	
 }
 
 function activatePowerUp() {
@@ -233,13 +226,6 @@ function activatePowerUp() {
 	player.addlife();
 	entitiesMap["enemies"].forEach(npc => npc.switchState(new FleeState()));
 
-	/*
-    setTimeout(() => {
-        powerUpActive = false;
-	//	entitiesMap["enemies"].forEach(npc => npc.switchState(new WanderState()));
-        gameMap.mapRenderer.changeGroundColor(0x0000ff); // Revert ground color
-    }, 1000);
-	*/;
 }
 
 
