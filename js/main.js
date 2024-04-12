@@ -129,33 +129,12 @@ function setup() {
 	entities.push(npc2)
 	entitiesMap["enemies"].push(npc2);
 
-	/*
-	let coin = new Spawn(new THREE.Color(0x00ff00), "coin");
-	coin.setModel(resource.get("roman coin"));
-	coin.location = gameMap.localize(gameMap.graph.getRandomEmptyTile());
-	entities.push(coin);
-	entitiesMap["coins"].push(coin);
-	*/
-	
-	
-	/*
-	npc3 = new Spawn(new THREE.Color(0xff0000),"coin");
-	npc3.setModel(resource.get("coin"));
-	npc3.size = 0.01;
-	npc3.location = gameMap.localize(gameMap.graph.getRandomEmptyTile());
-
-	entities.push(npc3)
-	entitiesMap["enemies"].push(npc3);
-	*/
 
 	// Add all entities to the scene
 	for(let i=0; i < entities.length; i++) {
 		
 		scene.add(entities[i].gameObject);
 	}
-
-
-
 	// Get a random starting place for the enemy
 	let startPlayer = gameMap.graph.getRandomEmptyTile();
 	// this is where we start the player
@@ -220,42 +199,7 @@ function checkHealth(deltaTime) {
 	}
 }
 
-// function checkCollisions() {
 
-// 	for ( let i = entitiesMap["coins"].length - 1; i >= 0; i--) {
-// 		let coin = entitiesMap["coins"][i];
-// 		const distanceToPlayer = coin.location.distanceTo(player.location);
-// 		if (distanceToPlayer < 2) {
-// 			//delete coin from map
-// 			let deletedId = entitiesMap["coins"][i].id;
-// 			let deletedObject = entitiesMap["coins"].splice(i, i);
-// 			//delte from 
-// 			for ( let j = 0; j < entities.length; j++) {
-// 				if (entities[j].id == deletedId) {
-			
-// 					entities.splice(j, j);
-// 				}
-// 			}
-// 			//add score
-// 			player.addScore();
-
-// 			//update scene
-// 			let index = i + 1;
-// 			console.log("deleting", "coin".concat(index.toString()))
-// 			let toD = scene.getObjectByName("coin".concat(index.toString()));
-			
-
-// 			console.log("to be delete", deletedId);
-// 			console.log(entities);
-// 			console.log(entitiesMap);
-// 			console.log(toD);
-//     		scene.remove(toD);
-// 			const coinNode = gameMap.quantize(player.location);
-//       		gameMap.setTileType(coinNode);
-// 			//animate();
-// 		}
-// 	}
-// }
 function checkCollisions() {
     for (let i = entitiesMap["coins"].length - 1; i >= 0; i--) {
         let coin = entitiesMap["coins"][i];
@@ -279,18 +223,6 @@ function checkCollisions() {
 				activatePowerUp();
 			}
 	}
-	// if (powerUpActive) {
-    //     for (let i = entitiesMap["enemies"].length - 1; i >= 0; i--) {
-    //         let npc = entitiesMap["enemies"][i];
-    //         const distanceToPlayer = npc.location.distanceTo(player.location);
-    //         if (distanceToPlayer < 2) { 
-    //             scene.remove(npc.gameObject);
-    //             entitiesMap["enemies"].splice(i, 1);
-    //             console.log("NPC removed due to power-up effect");
-    //         }
-    //     }
-    // }
-
 	
 }
 
@@ -300,13 +232,6 @@ function activatePowerUp() {
 	player.addlife();
 	entitiesMap["enemies"].forEach(npc => npc.switchState(new FleeState()));
 
-	/*
-    setTimeout(() => {
-        powerUpActive = false;
-	//	entitiesMap["enemies"].forEach(npc => npc.switchState(new WanderState()));
-        gameMap.mapRenderer.changeGroundColor(0x0000ff); // Revert ground color
-    }, 1000);
-	*/;
 }
 
 
