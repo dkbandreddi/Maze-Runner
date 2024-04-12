@@ -1,4 +1,4 @@
-Me (Dinesh Kumar 201927043) and my friend (Mehul Kapoor 201917168) have create the Maze Runner Game. This is a 3D maze-based game where a player navigates through a maze,
+Me (Dinesh Kumar 201927043) and my friend (Mehul Kapoor 201917168) have created the Maze Runner Game. This is a 3D maze-based game where a player navigates through a maze,
 collects coins, and avoids or pursues NPCs based on power-ups. The game is built using Three.js and JavaScript for game logic.
 
 How to Run.
